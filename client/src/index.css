@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Base Colors */
+  --background: 0 0% 100%;
+  --foreground: 222 14% 12%;
+  
+  /* Primary Colors */
+  --primary: 4 77% 57%; /* #e84c3d */
+  --primary-foreground: 0 0% 100%;
+  
+  /* Secondary Colors */
+  --secondary: 188 87% 43%; /* #0eb0d9 */
+  --secondary-foreground: 0 0% 100%;
+  
+  /* Neutral Colors */
+  --neutral-100: 210 40% 98%; /* #f7f9fc */
+  --neutral-200: 214 32% 91%; /* #e8edf2 */
+  --neutral-300: 214 25% 84%; /* #d1d9e6 */
+  --neutral-400: 220 17% 69%; /* #a0aec0 */
+  --neutral-500: 218 19% 50%; /* #6b7c93 */
+  --neutral-600: 218 23% 35%; /* #4a5568 */
+  --neutral-700: 220 26% 23%; /* #2d3748 */
+  --neutral-800: 222 47% 13%; /* #1a202c */
+  --neutral-900: 224 71% 10%; /* #171923 */
+  
+  /* Other UI Colors */
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222 47% 11.2%;
+  
+  /* Status Colors */
+  --success: 142 71% 45%; /* #22c55e */
+  --warning: 38 92% 50%; /* #f59e0b */
+  --destructive: 0 84% 60%; /* #ef4444 */
+  --destructive-foreground: 0 0% 98%;
+  
+  /* Border & Card Colors */
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11.2%;
+  
+  /* UI Element Colors */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11.2%;
+  --ring: 218 19% 50%;
+  
+  /* Sidebar Colors */
+  --sidebar-background: 222 47% 13%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-border: 223 25% 22%;
+  
+  /* Chart Colors */
+  --chart-1: 4 77% 57%;
+  --chart-2: 188 87% 43%;
+  --chart-3: 142 71% 45%;
+  --chart-4: 38 92% 50%;
+  --chart-5: 325 78% 58%;
+  
+  /* Radius */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222 47% 11.2%;
+  --foreground: 0 0% 98%;
+  
+  --primary: 4 77% 57%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 188 87% 43%;
+  --secondary-foreground: 0 0% 100%;
+  
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  
+  --card: 222 47% 11.2%;
+  --card-foreground: 0 0% 98%;
+  
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  
+  --popover: 222 47% 11.2%;
+  --popover-foreground: 0 0% 98%;
+  
+  --success: 142 70% 45%;
+  --warning: 38 92% 50%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --ring: 240 4.9% 83.9%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  #root {
+    @apply overflow-x-hidden w-full;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply container mx-auto px-4;
+  }
+
+  img {
+    @apply max-w-full h-auto object-cover;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  .bg-image {
+    @apply bg-cover bg-center bg-no-repeat;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary/90 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-secondary/90 transition-colors;
+  }
+  
+  .btn-outline {
+    @apply border border-primary text-primary hover:bg-primary/10 transition-colors;
+  }
+  
+  .cruise-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden border border-neutral-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+  }
+  
+  .page-header {
+    @apply relative h-[300px] bg-cover bg-center;
+  }
+  
+  .page-header-overlay {
+    @apply absolute inset-0 bg-neutral-900/60;
+  }
+  
+  .page-header-content {
+    @apply container-custom relative z-10 h-full flex flex-col justify-center;
+  }
+}
+
+/* Custom styles */
+.hero-gradient {
+  background: linear-gradient(to right, rgba(14, 176, 217, 0.8), rgba(232, 76, 61, 0.8));
+}
+
+.animated-gradient {
+  background: linear-gradient(270deg, rgba(14, 176, 217, 0.8), rgba(232, 76, 61, 0.8));
+  background-size: 400% 400%;
+  animation: gradient 8s ease infinite;
+}
+
+@keyframes gradient {
+  0% {background-position: 0% 50%}
+  50% {background-position: 100% 50%}
+  100% {background-position: 0% 50%}
+}
+
+/* Ant Design Overrides */
+.ant-btn-primary {
+  background-color: #e84c3d !important;
+}
+
+.ant-picker-focused, .ant-input-focused {
+  border-color: #e84c3d !important;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #e84c3d !important;
+  border-color: #e84c3d !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: #e84c3d !important;
+}
+
+.ant-radio-inner::after {
+  background-color: #e84c3d !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #e84c3d !important;
+}
+
+.ant-tabs-ink-bar {
+  background: #e84c3d !important;
+}

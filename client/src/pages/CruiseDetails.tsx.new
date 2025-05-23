@@ -1,0 +1,561 @@
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { 
+  Row, 
+  Col, 
+  Typography, 
+  Card, 
+  Button, 
+  Tabs, 
+  Tag, 
+  Rate, 
+  Divider,
+  List,
+  Avatar,
+  Image,
+  Descriptions,
+  Alert
+} from "antd";
+import { 
+  FiCheck, 
+  FiClock, 
+  FiUser, 
+  FiMapPin, 
+  FiHeart, 
+  FiGift, 
+  FiInfo,
+  FiAnchor,
+  FiX,
+  FiAlertCircle
+} from "react-icons/fi";
+import { formatPrice, formatDate, formatDuration } from "@/lib/utils";
+import PageHeader from "@/components/ui/PageHeader";
+import { cruiseData } from "@/data/cruiseData";
+import { ICruise } from "@/data/cruiseData";
+
+const { Title, Text, Paragraph } = Typography;
+const { TabPane } = Tabs;
+
+const CruiseDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [cruise, setCruise] = useState<ICruise | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("overview");
+  
+  useEffect(() => {
+    setLoading(true);
+    // In a real app, this would be an API call
+    const foundCruise = cruiseData.find(cruise => cruise.id === id);
+    
+    if (foundCruise) {
+      setCruise(foundCruise);
+    }
+    
+    setLoading(false);
+  }, [id]);
+  
+  const handleFavoriteToggle = () => {
+    setIsFavorite(prev => !prev);
+  };
+  
+  const getRandomDate = (start: Date, end: Date) => {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  };
+  
+  // Generate random dates for booking (this would come from API in real app)
+  const today = new Date();
+  const futureDate = new Date(today);
+  futureDate.setDate(today.getDate() + 180); // 6 months ahead
+  
+  const availableDates = Array.from({ length: 5 }, () => getRandomDate(today, futureDate))
+    .sort((a, b) => a.getTime() - b.getTime());
+  
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex justify-center">
+          <div className="spinner"></div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!cruise) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Alert 
+          message="Cruise Not Found" 
+          description="The cruise you're looking for doesn't exist or may have been removed."
+          type="error" 
+          showIcon 
+        />
+      </div>
+    );
+  }
+  
+  const {
+    name,
+    image,
+    gallery,
+    location,
+    price,
+    discountPercentage,
+    cruiseLine,
+    rating,
+    reviewCount,
+    duration,
+    cabinType, 
+    amenities, 
+    description, 
+    longDescription,
+    departureDate,
+    returnDate,
+    itinerary,
+    highlights,
+    inclusions,
+    exclusions,
+    reviews
+  } = cruise;
+  
+  const discountedPrice = discountPercentage
+    ? price - (price * (discountPercentage / 100))
+    : price;
+  
+  return (
+    <div>
+      <PageHeader 
+        title="Cruise Details"
+        breadcrumbs={[
+          { title: "Home", link: "/" },
+          { title: "Cruise", link: "/cruises" },
+          { title: "Cruise Details" }
+        ]}
+        backgroundImage={image}
+      />
+      
+      <div className="container mx-auto px-4 py-8">
+        {/* Cruise Header */}
+        <Card className="mb-6 overflow-hidden">
+          <div className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between">
+              <div>
+                <div className="flex items-center mb-2">
+                  <Title level={3} className="mr-3 mb-0">{name}</Title>
+                  <Tag color="green">VERIFIED</Tag>
+                </div>
+                <div className="flex items-center text-sm text-gray-600 mb-2">
+                  <FiMapPin className="text-primary mr-2" />
+                  <span>{location}</span>
+                  <div className="flex items-center ml-4">
+                    <Rate disabled defaultValue={rating} className="text-sm" />
+                    <span className="ml-1">({reviewCount} Reviews)</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 md:mt-0">
+                <Tag color="blue">Upcoming</Tag>
+              </div>
+            </div>
+          </div>
+
+          {/* Cruise Images */}
+          <div className="grid grid-cols-4 gap-1">
+            <div className="col-span-4 md:col-span-2 overflow-hidden h-64">
+              <Image
+                src={image}
+                alt={name}
+                className="w-full h-full object-cover hover:scale-105 transition duration-300"
+              />
+            </div>
+            {gallery && gallery.slice(0, 2).map((img, index) => (
+              <div key={index} className="hidden md:block col-span-1 overflow-hidden h-64">
+                <Image
+                  src={img}
+                  alt={`${name} - ${index + 1}`}
+                  className="w-full h-full object-cover hover:scale-105 transition duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Row gutter={24}>
+          {/* Main Content */}
+          <Col xs={24} lg={16}>
+            <Card className="mb-6">
+              <Tabs defaultActiveKey="overview" onChange={setSelectedTab}>
+                <TabPane tab="Overview" key="overview">
+                  <div className="p-4">
+                    <Title level={4}>About This Cruise</Title>
+                    <Paragraph className="text-gray-600 mb-6">
+                      {longDescription || description}
+                    </Paragraph>
+                    
+                    {highlights && highlights.length > 0 && (
+                      <>
+                        <Title level={5}>Highlights</Title>
+                        <List
+                          itemLayout="horizontal"
+                          dataSource={highlights}
+                          className="mb-6"
+                          renderItem={item => (
+                            <List.Item>
+                              <List.Item.Meta
+                                avatar={<FiCheck className="text-green-500 mt-1" />}
+                                title={<Text className="text-gray-600">{item}</Text>}
+                              />
+                            </List.Item>
+                          )}
+                        />
+                      </>
+                    )}
+                    
+                    {inclusions && inclusions.length > 0 && (
+                      <>
+                        <Title level={5}>What's Included</Title>
+                        <List
+                          grid={{ gutter: 16, column: 2 }}
+                          dataSource={inclusions}
+                          className="mb-6"
+                          renderItem={item => (
+                            <List.Item>
+                              <div className="flex items-center">
+                                <FiCheck className="text-green-500 mr-2" />
+                                <Text>{item}</Text>
+                              </div>
+                            </List.Item>
+                          )}
+                        />
+                      </>
+                    )}
+                    
+                    {exclusions && exclusions.length > 0 && (
+                      <>
+                        <Title level={5}>Not Included</Title>
+                        <List
+                          grid={{ gutter: 16, column: 2 }}
+                          dataSource={exclusions}
+                          className="mb-6"
+                          renderItem={item => (
+                            <List.Item>
+                              <div className="flex items-center">
+                                <FiX className="text-red-500 mr-2" />
+                                <Text>{item}</Text>
+                              </div>
+                            </List.Item>
+                          )}
+                        />
+                      </>
+                    )}
+                    
+                    <Title level={5}>Amenities</Title>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                      {amenities.map((amenity, index) => (
+                        <div key={index} className="flex items-center">
+                          <FiGift className="text-primary mr-2" />
+                          <Text>{amenity}</Text>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <Title level={5}>Cabin Information</Title>
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="flex items-center">
+                        <FiCheck className="text-green-500 mr-2" />
+                        <Text>Cabin Type: {cabinType}</Text>
+                      </div>
+                      <div className="flex items-center">
+                        <FiCheck className="text-green-500 mr-2" />
+                        <Text>Maximum Occupancy: 4 persons</Text>
+                      </div>
+                      <div className="flex items-center">
+                        <FiCheck className="text-green-500 mr-2" />
+                        <Text>Size: 185 sq ft</Text>
+                      </div>
+                      <div className="flex items-center">
+                        <FiCheck className="text-green-500 mr-2" />
+                        <Text>Views: Ocean View</Text>
+                      </div>
+                    </div>
+                  </div>
+                </TabPane>
+                
+                <TabPane tab="Itinerary" key="itinerary">
+                  <div className="p-4">
+                    <Title level={4}>Cruise Itinerary</Title>
+                    <Paragraph className="text-gray-600 mb-6">
+                      {duration} cruise with stops at beautiful destinations
+                    </Paragraph>
+                    
+                    {itinerary ? (
+                      <List
+                        className="mb-6"
+                        itemLayout="horizontal"
+                        dataSource={itinerary}
+                        renderItem={item => (
+                          <List.Item>
+                            <Card className="w-full">
+                              <div className="flex flex-col md:flex-row md:items-center">
+                                <div className="text-center md:text-left md:w-1/6 mb-4 md:mb-0">
+                                  <div className="inline-flex items-center justify-center bg-primary text-white w-12 h-12 rounded-full text-lg font-bold">
+                                    {item.day}
+                                  </div>
+                                </div>
+                                <div className="md:w-1/4 mb-4 md:mb-0">
+                                  <div className="font-semibold">{item.port}</div>
+                                  <div className="text-sm text-gray-600">
+                                    <div>Arrival: {item.arrival || 'N/A'}</div>
+                                    <div>Departure: {item.departure || 'N/A'}</div>
+                                  </div>
+                                </div>
+                                <div className="md:w-1/2">
+                                  <Paragraph className="mb-0">
+                                    {item.description}
+                                  </Paragraph>
+                                </div>
+                              </div>
+                            </Card>
+                          </List.Item>
+                        )}
+                      />
+                    ) : (
+                      <Alert
+                        message="Itinerary information will be available soon"
+                        type="info"
+                        showIcon
+                        icon={<FiInfo />}
+                        className="mb-6"
+                      />
+                    )}
+                  </div>
+                </TabPane>
+                
+                <TabPane tab="Reviews" key="reviews">
+                  <div className="p-4">
+                    <Title level={4}>Guest Reviews</Title>
+                    
+                    <div className="flex mb-6">
+                      <div className="text-center mr-6 p-4 bg-gray-50 rounded-lg">
+                        <div className="text-5xl font-bold text-primary mb-2">{rating}</div>
+                        <Rate disabled defaultValue={rating} />
+                        <div className="mt-1 text-sm text-gray-600">{reviewCount} reviews</div>
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="mb-2">
+                          <div className="flex items-center">
+                            <span className="w-16 text-right mr-2">5 Stars</span>
+                            <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                              <div className="bg-primary h-2 rounded-full w-[80%]"></div>
+                            </div>
+                            <span className="ml-2 text-gray-600 w-8">80%</span>
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex items-center">
+                            <span className="w-16 text-right mr-2">4 Stars</span>
+                            <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                              <div className="bg-primary h-2 rounded-full w-[15%]"></div>
+                            </div>
+                            <span className="ml-2 text-gray-600 w-8">15%</span>
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex items-center">
+                            <span className="w-16 text-right mr-2">3 Stars</span>
+                            <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                              <div className="bg-primary h-2 rounded-full w-[5%]"></div>
+                            </div>
+                            <span className="ml-2 text-gray-600 w-8">5%</span>
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex items-center">
+                            <span className="w-16 text-right mr-2">2 Stars</span>
+                            <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                              <div className="bg-primary h-2 rounded-full w-[0%]"></div>
+                            </div>
+                            <span className="ml-2 text-gray-600 w-8">0%</span>
+                          </div>
+                        </div>
+                        <div className="mb-2">
+                          <div className="flex items-center">
+                            <span className="w-16 text-right mr-2">1 Star</span>
+                            <div className="flex-1 bg-gray-200 h-2 rounded-full">
+                              <div className="bg-primary h-2 rounded-full w-[0%]"></div>
+                            </div>
+                            <span className="ml-2 text-gray-600 w-8">0%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <Divider />
+                    
+                    {reviews && reviews.length > 0 ? (
+                      <List
+                        itemLayout="vertical"
+                        dataSource={reviews}
+                        renderItem={review => (
+                          <List.Item>
+                            <div className="flex flex-col md:flex-row">
+                              <div className="md:w-1/6 mb-4 md:mb-0">
+                                <div className="flex items-center">
+                                  <Avatar 
+                                    src={review.user.avatar} 
+                                    icon={<FiUser />} 
+                                    size={50} 
+                                  />
+                                  <div className="ml-3">
+                                    <div className="font-semibold">{review.user.name}</div>
+                                    <div className="text-xs text-gray-500">{review.date}</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="md:w-5/6">
+                                <Rate disabled defaultValue={review.rating} className="mb-2" />
+                                <Paragraph>{review.comment}</Paragraph>
+                              </div>
+                            </div>
+                          </List.Item>
+                        )}
+                      />
+                    ) : (
+                      <div className="text-center py-8">
+                        <div className="text-gray-400 mb-2">
+                          <FiAlertCircle className="text-4xl mx-auto" />
+                        </div>
+                        <Title level={5} className="text-gray-600">No reviews yet</Title>
+                      </div>
+                    )}
+                  </div>
+                </TabPane>
+              </Tabs>
+            </Card>
+          </Col>
+          
+          {/* Sidebar */}
+          <Col xs={24} lg={8}>
+            <Card className="mb-6 sticky top-24">
+              <div className="p-3 bg-gray-50 rounded-lg mb-4">
+                <div className="flex justify-between items-end mb-2">
+                  <div>
+                    <Text className="text-sm text-gray-500">Price</Text>
+                    <div className="flex items-center">
+                      {discountPercentage && discountPercentage > 0 && (
+                        <Text delete className="text-gray-400 mr-2">
+                          {formatPrice(price)}
+                        </Text>
+                      )}
+                      <Title level={4} className="mb-0 text-primary">
+                        {formatPrice(discountedPrice)}
+                      </Title>
+                      <Text className="text-xs ml-1 self-end mb-1">/person</Text>
+                    </div>
+                  </div>
+                  <Button 
+                    type="text" 
+                    className="flex items-center hover:text-primary"
+                    onClick={handleFavoriteToggle}
+                  >
+                    {isFavorite ? (
+                      <FiHeart className="text-lg fill-current text-primary" />
+                    ) : (
+                      <FiHeart className="text-lg" />
+                    )}
+                  </Button>
+                </div>
+                
+                {discountPercentage && discountPercentage > 0 && (
+                  <div className="text-xs mb-2 text-green-600">
+                    Save {discountPercentage}% when you book now
+                  </div>
+                )}
+                
+                <Divider className="my-3" />
+                
+                <List className="mb-3">
+                  <List.Item className="px-0 py-1 border-none">
+                    <List.Item.Meta
+                      avatar={<FiCheck className="text-green-500" />}
+                      title={<Text className="text-gray-700 text-sm">Flexible cancellation</Text>}
+                    />
+                  </List.Item>
+                  <List.Item className="px-0 py-1 border-none">
+                    <List.Item.Meta
+                      avatar={<FiCheck className="text-green-500" />}
+                      title={<Text className="text-gray-700 text-sm">24/7 customer support</Text>}
+                    />
+                  </List.Item>
+                  <List.Item className="px-0 py-1 border-none">
+                    <List.Item.Meta
+                      avatar={<FiCheck className="text-green-500" />}
+                      title={<Text className="text-gray-700 text-sm">Secure payment</Text>}
+                    />
+                  </List.Item>
+                </List>
+                
+                <Link to={`/cruises/${id}/book`}>
+                  <Button type="primary" block size="large" className="mb-2">
+                    Book Now
+                  </Button>
+                </Link>
+                
+                <Button type="default" block>
+                  Ask a Question
+                </Button>
+              </div>
+              
+              <div className="mb-4">
+                <Title level={5}>Cruise Details</Title>
+                <Descriptions column={1} className="mt-2">
+                  <Descriptions.Item label="Duration">
+                    <div className="flex items-center">
+                      <FiClock className="mr-2 text-primary" />
+                      {duration}
+                    </div>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Cabin Type">
+                    <div className="flex items-center">
+                      <FiUser className="mr-2 text-primary" />
+                      {cabinType}
+                    </div>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Cruise Line">
+                    <div className="flex items-center">
+                      <FiAnchor className="mr-2 text-primary" />
+                      {cruiseLine}
+                    </div>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Departure">
+                    <div className="flex items-center">
+                      <FiClock className="mr-2 text-primary" />
+                      {departureDate || "Available dates below"}
+                    </div>
+                  </Descriptions.Item>
+                </Descriptions>
+              </div>
+              
+              <div>
+                <Title level={5}>Available Dates</Title>
+                <div className="grid grid-cols-1 gap-2">
+                  {availableDates.map((date, index) => (
+                    <div key={index} className="p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-gray-50 cursor-pointer transition">
+                      <div className="font-medium">{formatDate(date)}</div>
+                      <div className="text-xs text-gray-500">
+                        {formatDuration(10)} from {formatPrice(discountedPrice)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+};
+
+export default CruiseDetails;
