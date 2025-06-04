@@ -1,13 +1,13 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import HeroSection from "@/components/home/HeroSection";
-import CruiseTypes from "@/components/home/CruiseTypes";
-import FeaturedDestinations from "@/components/home/FeaturedDestinations";
-import FeaturedCruises from "@/components/home/FeaturedCruises";
-import Stats from "@/components/home/Stats";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
-import Testimonials from "@/components/home/Testimonials";
-import CTABanner from "@/components/home/CTABanner";
+import HeroSection from "@/components/Home/HeroSection";
+import CruiseTypes from "@/components/Home/CruiseTypes";
+import FeaturedDestinations from "@/components/Home/FeaturedDestinations";
+import FeaturedCruises from "@/components/Home/FeaturedCruises";
+import Stats from "@/components/Home/Stats";
+import WhyChooseUs from "@/components/Home/WhyChooseUs";
+import Testimonials from "@/components/Home/Testimonials";
+import CTABanner from "@/components/Home/CTABanner";
 
 const Home: React.FC = () => {
   return (

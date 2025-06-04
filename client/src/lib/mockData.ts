@@ -10,12 +10,12 @@ export const shipImages = [
 
 // Destination images (tropical locations)
 export const destinationImages = [
-  'https://pixabay.com/get/g379282cd15bb65a5748b005e37fd2c9c5d51662efe50928cdee5ff7567c77d3a89bd07d75fb071e2acb47e2dee3ed00fe1dc1f03a93634e081badb364a6d6e1a_1280.jpg', // Caribbean
-  'https://pixabay.com/get/g14cde8bb46c637402d6873801b256993aadb4c334645c83b9c0f103535b3a0606478b66c5dc0ff05c6ec347ed63fc9a678ebc3458e39b0898ca3d8a2bb05c821_1280.jpg', // Mediterranean
-  'https://pixabay.com/get/g1e9c2c761567d121f9177d14ff26b23a0f1d83e55f77ba2b1d7919a4a9d4335c3b127fd2b6c16ff8e08ae775e8b64addb5ac2529530077becb7c2b87e215fdc8_1280.jpg', // Alaska
-  'https://pixabay.com/get/g02b04b753fce7668d57d8f1fc3567b8e5cfcb151321fa6cb6fa941a6c7d3f1a3fd172ca96a46d3c65a71b333dd339e0d688c99d225c21367089aa1d8dde968a3_1280.jpg', // Greek Islands
-  'https://pixabay.com/get/g650479161ba4db3e7518f98c197cdbeb932fcd2b7feb8405548c88ff564af26716617bc6517687e9d11d371b347152f6acd7cce1a4fe964adb9c551877d40dae_1280.jpg', // Hawaii
-  'https://pixabay.com/get/g062b484c303152f7456e576327a22666db61706a98ca8f582a06dae59f0ea6d939b5ed99171ad7d618b7ce7da9c0a7d6132ba75fc32882e739e6f85118f22dd7_1280.jpg' // Baltic Sea
+  'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Caribbean
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Mediterranean
+  'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Alaska
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Greek Islands
+  'https://images.unsplash.com/photo-1598135753163-6167c1a1ad65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Hawaii
+  'https://images.unsplash.com/photo-1580745777747-d2ea5bb36132?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Baltic Sea
 ];
 
 // Cabin images

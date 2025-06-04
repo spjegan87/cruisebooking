@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { SearchBar } from '@/components/ui/SearchBar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const HeroSection = () => {
   const [_, navigate] = useLocation();
@@ -30,13 +32,46 @@ const HeroSection = () => {
           
           {/* Search Form */}
           <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-4">
-            <SearchBar 
-              destination={searchParams.destination}
-              checkIn={searchParams.checkIn}
-              checkOut={searchParams.checkOut}
-              guests={searchParams.guests}
-              onSearch={handleSearch}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                <Select value={searchParams.destination} onValueChange={(value) => setSearchParams({...searchParams, destination: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Any Destination" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="caribbean">Caribbean</SelectItem>
+                    <SelectItem value="mediterranean">Mediterranean</SelectItem>
+                    <SelectItem value="alaska">Alaska</SelectItem>
+                    <SelectItem value="hawaii">Hawaii</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Check In</label>
+                <Input 
+                  type="date" 
+                  value={searchParams.checkIn}
+                  onChange={(e) => setSearchParams({...searchParams, checkIn: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Check Out</label>
+                <Input 
+                  type="date" 
+                  value={searchParams.checkOut}
+                  onChange={(e) => setSearchParams({...searchParams, checkOut: e.target.value})}
+                />
+              </div>
+              <div className="flex items-end">
+                <Button 
+                  onClick={() => handleSearch(searchParams)}
+                  className="w-full"
+                >
+                  Search Cruises
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
