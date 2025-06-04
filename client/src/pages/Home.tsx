@@ -5,7 +5,7 @@ import CruiseTypes from "@/components/Home/CruiseTypes";
 import FeaturedDestinations from "@/components/Home/FeaturedDestinations";
 import FeaturedCruises from "@/components/Home/FeaturedCruises";
 import Stats from "@/components/Home/Stats";
-import WhyChooseUs from "@/components/Home/WhyChooseUs";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Testimonials from "@/components/Home/Testimonials";
 import CTABanner from "@/components/Home/CTABanner";
 
